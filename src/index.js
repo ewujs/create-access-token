@@ -19,7 +19,10 @@ import {ajax} from './ajax';
     try {
       const sessionToken = await ajax({
         url: `https://${window.location.hostname}/store/${siteId}/SessionToken`,
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          Accept: 'application/json'
+        }
       })
       .send()
       .then(res => res)
