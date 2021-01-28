@@ -129,7 +129,7 @@ import {ajax} from './ajax';
         url: `https://${window.location.hostname}/store/${siteId}/SessionToken?apiKey=${pk}`,
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          Accept: 'application/json'
         }
       })
       .send()
