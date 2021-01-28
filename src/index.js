@@ -35,6 +35,46 @@ import {ajax} from './ajax';
 
   const createLimitedAccessToken = async (params) => {
     const {key, secret, siteId} = params || {};
+  
+    if (typeof key !== 'string') {
+      throw new Error('Please pass a API Key.');
+    }
+  
+    if (typeof secret !== 'string') {
+      throw new Error('Please pass a API secret.');
+    }
+  
+    if (typeof siteId !== 'string') {
+      throw new Error('Please pass the site ID.');
+    }
+  
+    try {
+      const sessionToken = await getSessionToken(siteId);
+      const tokenData = await ajax({
+        url: `https://${apiDomain}/oauth20/token`,
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${window.btoa(key + ':' + secret)}`
+        },
+        data: {
+          grant_type: 'password',
+          dr_session_token: sessionToken
+        }
+      })
+      .send()
+      .then(res => res)
+      .catch((e) => {
+        throw Error(e);
+      });
+  
+      return tokenData;
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const createFullAccessToken = async (params) => {
+    const {key, secret, siteId, username, password} = params || {};
 
     if (typeof key !== 'string') {
       throw new Error('Please pass a API Key.');
@@ -58,6 +98,8 @@ import {ajax} from './ajax';
         },
         data: {
           grant_type: 'password',
+          username: username,
+          password: window.btoa(password),
           dr_session_token: sessionToken
         }
       })
@@ -73,30 +115,19 @@ import {ajax} from './ajax';
     }
   };
 
-  const createFullAccessToken = async (params) => {
-    const {key, secret, username, password} = params || {};
-
-    if (typeof key !== 'string') {
-      throw new Error('Please pass a API Key.');
+  const createLimitedAccessTokenByPk = async (siteId, pk) => {
+    if (typeof siteId !== 'string') {
+      throw new Error('Please pass the site ID.');
     }
 
-    if (typeof secret !== 'string') {
-      throw new Error('Please pass a API secret.');
+    if (typeof pk !== 'string') {
+      throw new Error('Please pass a public API Key.');
     }
 
     try {
       const tokenData = await ajax({
-        url: `https://${apiDomain}/oauth20/token`,
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${window.btoa(key + ':' + secret)}`
-        },
-        data: {
-          grant_type: 'password',
-          dr_session_token: sessionToken,
-          username: username,
-          password: window.btoa(password)
-        }
+        url: `https://${window.location.hostname}/store/${siteId}/SessionToken?apiKey=${pk}`,
+        method: 'GET'
       })
       .send()
       .then(res => res)
@@ -135,6 +166,7 @@ import {ajax} from './ajax';
   window.DRAccessToken = {
     createLimitedAccessToken: createLimitedAccessToken,
     createFullAccessToken: createFullAccessToken,
-    getTokenInfo: getTokenInfo,
+    createLimitedAccessTokenByPk: createLimitedAccessTokenByPk,
+    getTokenInfo: getTokenInfo
   };
 })(window);
