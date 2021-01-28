@@ -30,7 +30,7 @@ import {ajax} from './ajax';
         throw Error(e);
       });
 
-      return sessionToken.session_token;
+      return JSON.parse(sessionToken).session_token;
     } catch (e) {
       console.error(e);
     }
