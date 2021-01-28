@@ -127,7 +127,10 @@ import {ajax} from './ajax';
     try {
       const tokenData = await ajax({
         url: `https://${window.location.hostname}/store/${siteId}/SessionToken?apiKey=${pk}`,
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       .send()
       .then(res => res)
