@@ -69,7 +69,9 @@ import {ajax} from './ajax';
       .catch((e) => {
         throw Error(e);
       });
-  
+
+      sessionStorage.setItem('drAccessToken', JSON.parse(tokenData));
+
       return tokenData;
     } catch (e) {
       console.error(e);
@@ -111,6 +113,8 @@ import {ajax} from './ajax';
       .catch((e) => {
         throw Error(e);
       });
+
+      sessionStorage.setItem('drAccessToken', JSON.parse(tokenData));
 
       return tokenData;
     } catch (e) {
@@ -169,7 +173,7 @@ import {ajax} from './ajax';
     }
   };
 
-  window.DRAccessToken = {
+  window.DRCommAPI = {
     createLimitedAccessToken: createLimitedAccessToken,
     createFullAccessToken: createFullAccessToken,
     createLimitedAccessTokenByPk: createLimitedAccessTokenByPk,
