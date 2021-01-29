@@ -70,7 +70,7 @@ import {ajax} from './ajax';
         throw Error(e);
       });
 
-      sessionStorage.setItem('drAccessToken', JSON.parse(tokenData));
+      sessionStorage.setItem('drAccessToken', tokenData);
 
       return tokenData;
     } catch (e) {
@@ -114,7 +114,7 @@ import {ajax} from './ajax';
         throw Error(e);
       });
 
-      sessionStorage.setItem('drAccessToken', JSON.parse(tokenData));
+      sessionStorage.setItem('drAccessToken', tokenData);
 
       return tokenData;
     } catch (e) {
