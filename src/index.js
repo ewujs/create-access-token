@@ -173,7 +173,7 @@ import {ajax} from './ajax';
     }
   };
 
-  window.DRCommAPI = {
+  window.DRAccessToken = {
     createLimitedAccessToken: createLimitedAccessToken,
     createFullAccessToken: createFullAccessToken,
     createLimitedAccessTokenByPk: createLimitedAccessTokenByPk,
