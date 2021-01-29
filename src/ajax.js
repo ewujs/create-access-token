@@ -41,7 +41,10 @@ export const ajax = (settings) => {
 
   const setHeaders = (xhr, headers) => {
     headers = headers || {};
-    headers['Content-Type'] = 'application/x-www-form-urlencoded';
+
+    if (!headers.hasOwnProperty('Content-Type')) {
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
    
     Object.keys(headers).forEach((name) => {
       (headers[name] && xhr.setRequestHeader(name, headers[name]));
@@ -57,7 +60,18 @@ export const ajax = (settings) => {
 
       request.open(params.method, params.url);
       setHeaders(request, params.headers);
-      request.send(Object.keys(params.data).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params.data[key])).join('&'));
+
+      const contentType = params.headers['Content-Type'];
+
+      switch (contentType) {
+        case 'application/x-www-form-urlencoded':
+          request.send(Object.keys(params.data).map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params.data[key])).join('&'));
+          break;
+        case 'application/json':
+          request.send(JSON.stringify(params.data));
+          break;
+      }
+
       request.onreadystatechange = () => {
         if (request.readyState !== 4) return;
     
